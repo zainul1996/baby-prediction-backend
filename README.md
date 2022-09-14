@@ -8,8 +8,8 @@ Sample Request:
 ```JSON
 {
     "current_age": 9,
-    "current_weight":9.7,
-    "sex":"male",
+    "current_weight": 9.7,
+    "sex": "male",
     "prediction_age": 9
 }
 ```
