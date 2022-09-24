@@ -31,7 +31,7 @@ git clone https://github.com/zainul1996/baby-prediction-backend.git
 
 2. cd into project and install dependancies
 ```bash
-cd baby-prediction-backend && pip install requirements.txt
+cd baby-prediction-backend && pip install -r requirements.txt
 ```
 
 3. Run Server
