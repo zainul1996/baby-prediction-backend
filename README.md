@@ -129,6 +129,8 @@ Sample Response:
 }
 ```
 
+- [x] Calculates BMI of a baby<br />
+
 ```
 POST /calculateBMI
 ```
