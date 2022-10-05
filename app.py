@@ -119,7 +119,6 @@ def predict_height():
 @app.route("/calculateBMI", methods=["POST"])
 def calculate_bmi():
     data = request.get_json()
-    current_age = data["current_age"]
     weight = data["current_weight"]
     height = data["current_height"]
     bmi = weight / (height / 100) ** 2
