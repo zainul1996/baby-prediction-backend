@@ -1,3 +1,4 @@
 flask
 pandas
 scipy
+flask-cors

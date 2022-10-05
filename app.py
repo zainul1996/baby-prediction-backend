@@ -1,11 +1,13 @@
 # app.py
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import math
 import pandas as pd
 from scipy.stats import norm
 
 
 app = Flask(__name__)
+CORS(app)
 pd.set_option("display.precision", 12)
 weightdf = pd.read_csv("wtageinf.csv", parse_dates=False)
 heightdf = pd.read_csv("lenageinf.csv", parse_dates=False)
