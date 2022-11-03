@@ -5,7 +5,7 @@ Flask backend that contains the following API end points:<br />
 - [x] Predict Weight of a Baby<br />
 
 ```
-POST /predictWeight
+POST /predictWeightAll
 ```
 
 Sample Request:
@@ -69,7 +69,7 @@ Sample Response:
 - [x] Predict Height of a Baby<br />
 
 ```
-POST /predictHeight
+POST /predictHeightAll
 ```
 
 Sample Request:
