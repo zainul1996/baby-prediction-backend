@@ -1,4 +1,5 @@
 # app.py
+import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import math
@@ -23,6 +24,13 @@ def get_LMS(age, sex, df):
 
 def z2percentile(z):
     return norm.cdf(z) * 100
+
+def percentile2z(percentile):
+    return norm.ppf(percentile / 100)
+    # reverse z2percentile
+    return norm.cdf(z) * 100
+
+
 
 
 def get_percentile(age, weight, sex, df):
@@ -50,6 +58,7 @@ def get_weight_nonzero(age, z, sex, df):
     L = lmsdf["L"].values[0]
     M = lmsdf["M"].values[0]
     S = lmsdf["S"].values[0]
+    print(L,M,S, z)
     return M * ((L * S * z) + 1) ** (1 / L)
 
 @app.route("/visitorCount", methods=["POST"])
@@ -215,13 +224,91 @@ def predict_height_all():
         else:
             prediction_height = get_weight_nonzero(age, zindex, sex, heightabovedf)
         prediction_heights[age] = round(prediction_height, 2)
-        
+
     return jsonify(
         {
             "predicted_height": prediction_heights,
             "percentile": round(percentile, 2),
         }
     )
+
+@app.route("/predictHeightForPercentile", methods=["POST"])
+def predict_height_for_percentile():
+    prediction_ages = [0] + [i + 0.5 for i in range(0, 240)] + [240]
+    percentiles= [5,10,25,50,75,90,95]
+    # convert percentile to zindex
+    zindex = []
+    for percentile in percentiles:
+        zindex.append(percentile2z(percentile))
+    
+    # get height for each zindex
+    heights = {}
+    for z in zindex:
+        heights[round(z2percentile(z))] = {}
+
+        heights[round(z2percentile(z))]["male"] = {}
+        heights[round(z2percentile(z))]["female"] = {}
+        for age in prediction_ages:
+            heights[round(z2percentile(z))]["male"][age] = {}
+            if age < 36:
+                maleHeight = get_weight_nonzero(age, z, 1, heightdf)
+                femaleHeight = get_weight_nonzero(age, z, 2, heightdf)
+                heights[round(z2percentile(z))]["male"][age] = round(maleHeight, 2)
+                heights[round(z2percentile(z))]["female"][age] = round(femaleHeight, 2)
+            else:
+                maleHeight = get_weight_nonzero(age, z, 1, heightabovedf)
+                femaleHeight = get_weight_nonzero(age, z, 2, heightabovedf)
+                heights[round(z2percentile(z))]["male"][age] = round(maleHeight, 2)
+                heights[round(z2percentile(z))]["female"][age] = round(femaleHeight, 2)
+    # save to json file named heightData.json
+    with open('heightData.json', 'w') as fp:
+        json.dump(heights, fp)
+    return jsonify(heights)
+
+@app.route("/getHeightPercentile", methods=["POST"])
+def get_height_percentile():
+    with open('heightData.json') as json_file:
+        data = json.load(json_file)
+        return jsonify(data)
+
+@app.route("/predictWeightForPercentile", methods=["POST"])
+def predict_weight_for_percentile():
+    prediction_ages = [0] + [i + 0.5 for i in range(0, 240)] + [240]
+    percentiles= [5,10,25,50,75,90,95]
+    # convert percentile to zindex
+    zindex = []
+    for percentile in percentiles:
+        zindex.append(percentile2z(percentile))
+    
+    # get weight for each zindex
+    weights = {}
+    for z in zindex:
+        weights[round(z2percentile(z))] = {}
+
+        weights[round(z2percentile(z))]["male"] = {}
+        weights[round(z2percentile(z))]["female"] = {}
+        for age in prediction_ages:
+            weights[round(z2percentile(z))]["male"][age] = {}
+            if age < 36:
+                maleWeight = get_weight_nonzero(age, z, 1, weightdf)
+                femaleWeight = get_weight_nonzero(age, z, 2, weightdf)
+                weights[round(z2percentile(z))]["male"][age] = round(maleWeight, 2)
+                weights[round(z2percentile(z))]["female"][age] = round(femaleWeight, 2)
+            else:
+                maleWeight = get_weight_nonzero(age, z, 1, weightabovedf)
+                femaleWeight = get_weight_nonzero(age, z, 2, weightabovedf)
+                weights[round(z2percentile(z))]["male"][age] = round(maleWeight, 2)
+                weights[round(z2percentile(z))]["female"][age] = round(femaleWeight, 2)
+    # save to json file named weightData.json
+    with open('weightData.json', 'w') as fp:
+        json.dump(weights, fp)
+    return jsonify(weights)
+
+@app.route("/getWeightPercentile", methods=["POST"])
+def get_weight_percentile():
+    with open('weightData.json') as json_file:
+        data = json.load(json_file)
+        return jsonify(data)
 
 @app.route("/predictHeight", methods=["POST"])
 def predict_height():
