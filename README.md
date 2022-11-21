@@ -152,6 +152,41 @@ Sample Response:
 }
 ```
 
+```
+
+- [x] Get percentile data for height<br />
+
+```
+
+GET /getWeightPercentile
+
+```
+
+Sample Response:
+
+```JSON
+{
+    {
+    "10": {
+        "female": {
+            "0": 2.75,
+            "0.5": 3.1,
+            "1.5": 3.77,
+            "10.5": 7.87,
+            "AGE": "WEIGHT"
+        },
+        "male": {
+            "0": 2.77,
+            "0.5": 3.21,
+            "1.5": 4.02,
+            "10.5": 8.54,
+            "AGE": "WEIGHT"
+        }
+    },
+    ...
+}
+````
+
 ## Setup
 
 1. Clone Repository

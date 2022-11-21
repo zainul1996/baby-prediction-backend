@@ -265,7 +265,7 @@ def predict_height_for_percentile():
         json.dump(heights, fp)
     return jsonify(heights)
 
-@app.route("/getHeightPercentile", methods=["POST"])
+@app.route("/getHeightPercentile", methods=["GET"])
 def get_height_percentile():
     with open('heightData.json') as json_file:
         data = json.load(json_file)
@@ -304,7 +304,7 @@ def predict_weight_for_percentile():
         json.dump(weights, fp)
     return jsonify(weights)
 
-@app.route("/getWeightPercentile", methods=["POST"])
+@app.route("/getWeightPercentile", methods=["GET"])
 def get_weight_percentile():
     with open('weightData.json') as json_file:
         data = json.load(json_file)
