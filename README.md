@@ -152,8 +152,6 @@ Sample Response:
 }
 ```
 
-```
-
 - [x] Get percentile data for height<br />
 
 ```
@@ -174,18 +172,53 @@ Sample Response:
             "1.5": 3.77,
             "10.5": 7.87,
             "AGE": "WEIGHT"
-        },
+            },
         "male": {
             "0": 2.77,
             "0.5": 3.21,
             "1.5": 4.02,
             "10.5": 8.54,
             "AGE": "WEIGHT"
+            }
         }
-    },
-    ...
+    }
+
 }
-````
+```
+
+- [x] Get percentile data for height<br />
+
+```
+
+GET /getHeightPercentile
+
+```
+
+Sample Response:
+
+```JSON
+{
+    {
+    "10": {
+        "female": {
+            "0": 46.34,
+            "0.5": 48.74,
+            "1.5": 52.3,
+            "10.5": 68.25,
+            "AGE": "HEIGHT"
+            },
+        "male": {
+            "0": 46.55,
+            "0.5": 49.46,
+            "1.5": 53.55,
+            "10.5": 70.2,
+            "AGE": "HEIGHT"
+            }
+        }
+    }
+
+}
+```
 
 ## Setup
 
