@@ -246,20 +246,20 @@ def predict_height_for_percentile():
     for z in zindex:
         heights[round(z2percentile(z))] = {}
 
-        heights[round(z2percentile(z))]["male"] = {}
-        heights[round(z2percentile(z))]["female"] = {}
+        heights[round(z2percentile(z))]["male"] = []
+        heights[round(z2percentile(z))]["female"] = []
         for age in prediction_ages:
-            heights[round(z2percentile(z))]["male"][age] = {}
+            # heights[round(z2percentile(z))]["male"][age] = {}
             if age < 36:
                 maleHeight = get_weight_nonzero(age, z, 1, heightdf)
                 femaleHeight = get_weight_nonzero(age, z, 2, heightdf)
-                heights[round(z2percentile(z))]["male"][age] = round(maleHeight, 2)
-                heights[round(z2percentile(z))]["female"][age] = round(femaleHeight, 2)
+                heights[round(z2percentile(z))]["male"].append(round(maleHeight, 2))
+                heights[round(z2percentile(z))]["female"].append(round(femaleHeight, 2))
             else:
                 maleHeight = get_weight_nonzero(age, z, 1, heightabovedf)
                 femaleHeight = get_weight_nonzero(age, z, 2, heightabovedf)
-                heights[round(z2percentile(z))]["male"][age] = round(maleHeight, 2)
-                heights[round(z2percentile(z))]["female"][age] = round(femaleHeight, 2)
+                heights[round(z2percentile(z))]["male"].append(round(maleHeight, 2))
+                heights[round(z2percentile(z))]["female"].append(round(femaleHeight, 2))
     # save to json file named heightData.json
     with open('heightData.json', 'w') as fp:
         json.dump(heights, fp)
@@ -273,6 +273,7 @@ def get_height_percentile():
 
 @app.route("/predictWeightForPercentile", methods=["POST"])
 def predict_weight_for_percentile():
+    print("hi")
     prediction_ages = [0] + [i + 0.5 for i in range(0, 240)] + [240]
     percentiles= [5,10,25,50,75,90,95]
     # convert percentile to zindex
@@ -285,20 +286,20 @@ def predict_weight_for_percentile():
     for z in zindex:
         weights[round(z2percentile(z))] = {}
 
-        weights[round(z2percentile(z))]["male"] = {}
-        weights[round(z2percentile(z))]["female"] = {}
+        weights[round(z2percentile(z))]["male"] = []
+        weights[round(z2percentile(z))]["female"] = []
         for age in prediction_ages:
-            weights[round(z2percentile(z))]["male"][age] = {}
+            # weights[round(z2percentile(z))]["male"][age] = {}
             if age < 36:
                 maleWeight = get_weight_nonzero(age, z, 1, weightdf)
                 femaleWeight = get_weight_nonzero(age, z, 2, weightdf)
-                weights[round(z2percentile(z))]["male"][age] = round(maleWeight, 2)
-                weights[round(z2percentile(z))]["female"][age] = round(femaleWeight, 2)
+                weights[round(z2percentile(z))]["male"].append(round(maleWeight, 2))
+                weights[round(z2percentile(z))]["female"].append(round(femaleWeight, 2))
             else:
                 maleWeight = get_weight_nonzero(age, z, 1, weightabovedf)
                 femaleWeight = get_weight_nonzero(age, z, 2, weightabovedf)
-                weights[round(z2percentile(z))]["male"][age] = round(maleWeight, 2)
-                weights[round(z2percentile(z))]["female"][age] = round(femaleWeight, 2)
+                weights[round(z2percentile(z))]["male"].append(round(maleWeight, 2))
+                weights[round(z2percentile(z))]["female"].append(round(femaleWeight, 2))
     # save to json file named weightData.json
     with open('weightData.json', 'w') as fp:
         json.dump(weights, fp)
@@ -361,4 +362,4 @@ def index():
 
 if __name__ == "__main__":
     # Threaded option to enable multiple instances for multiple user access support
-    app.run(threaded=True, debug=True)
+    app.run(threaded=True, debug=True, port=5001)
